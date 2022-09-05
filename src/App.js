@@ -91,6 +91,8 @@ function App() {
     function restartGame() {
         setTenzies(false);
         setDice(allNewDice(10));
+        // if this was your first time playing your hiscore is set.
+        if (localHiscore === null) localStorage.setItem("hiscore", rolls);
     }
 
     // Rolling the unselected dies, if tenzies is true we run the restart game function instead.
