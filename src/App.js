@@ -22,15 +22,19 @@ function App() {
     const [rolls, setRolls] = useState(1);
     const [localHiscore, setLocalHiscore] = useState(getHiscore);
 
+    // This function grabs your hiscore from local storage.
     function getHiscore() {
         const hiscoreFromLocalStorage = localStorage.getItem("hiscore");
         const hiscore = JSON.parse(hiscoreFromLocalStorage);
         return hiscore;
     }
+
+    // This function is ran when you have Tenzies to check if you beat your hiscore.
     function checkHiscore() {
         if (localHiscore > rolls) localStorage.setItem("hiscore", rolls);
     }
 
+    // This useEffect runs every time your dice updates, to check if you have Tenzies
     useEffect(() => {
         const firstValue = dice[0].value;
         const allHeld = dice.every((die) => die.isHeld);
@@ -51,7 +55,7 @@ function App() {
         return newDice;
     }
 
-    // Roll for once dice at a time.
+    // Roll for one dice at a time.
     function rollNewDice() {
         const newNumber = Math.ceil(Math.random() * 6);
         const dieObject = {
@@ -62,6 +66,7 @@ function App() {
         return dieObject;
     }
 
+    // Function to let you toggle a die to be held.
     function holdDie(id) {
         setDice((oldDice) =>
             oldDice.map((die) => {
@@ -89,15 +94,8 @@ function App() {
     }
 
     // Rolling the unselected dies, if tenzies is true we run the restart game function instead.
-
-    if (tenzies) {
-        if (localHiscore > rolls) {
-            checkHiscore();
-            setLocalHiscore(getHiscore);
-        }
-    }
-
     function rollDice() {
+        // I use the same button to roll/restart the game, so if Tenzies is true, a check is made if you have a new hiscore locally.
         if (tenzies) {
             if (localHiscore > rolls) {
                 checkHiscore();
@@ -105,6 +103,7 @@ function App() {
             }
             restartGame();
             setRolls(0);
+            return;
         }
         setRolls((oldRolls) => oldRolls + 1);
         setDice((oldDice) =>
